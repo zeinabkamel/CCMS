@@ -1,0 +1,99 @@
+﻿@page
+@model CCMS.Web.Pages.Patients.IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<CCMS.Localization.CCMSResource> L
+
+@{
+    ViewBag.Title = L["Patients"];
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="m-0">@ViewBag.Title</h5>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateModal">
+            @L["Create"]
+        </button>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>@L["Code"]</th>
+                    <th>@L["FullName"]</th>
+                    <th>@L["Phone"]</th>
+                    <th style="width:150px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Items != null && Model.Items.Any())
+                {
+                    foreach (var p in Model.Items)
+                    {
+                        <tr>
+                            <td>@p?.Code</td>
+                            <td>@p?.FullName</td>
+                            <td>@p?.Phone</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#Edit-@p.Id">
+                                    @L["Edit"]
+                                </button>
+
+                                <form method="post" asp-page-handler="Delete" class="d-inline">
+                                    <input type="hidden" name="Id" value="@p?.Id" />
+                                    <button class="btn btn-sm btn-danger" type="submit">@L["Delete"]</button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <partial name="Partials/_EditModal" model="p" />
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="4" class="text-center text-muted">@L["NoPatientsFound"]</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Create Modal -->
+<div class="modal fade" id="CreateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Create">
+                <div class="modal-header">
+                    <h5 class="modal-title">@L["Create"]</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">@L["Code"]</label>
+                        <input class="form-control" name="Code" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@L["FullName"]</label>
+                        <input class="form-control" name="FullName" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@L["Phone"]</label>
+                        <input class="form-control" name="Phone" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@L["Gender"]</label>
+                        <input class="form-control" name="Gender" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@L["Notes"]</label>
+                        <textarea class="form-control" name="Notes" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-bs-dismiss="modal" type="button">@L["Cancel"]</button>
+                    <button class="btn btn-primary" type="submit">@L["Save"]</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

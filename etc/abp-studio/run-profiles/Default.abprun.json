@@ -1,0 +1,18 @@
+﻿{
+  "applications": {
+    "CCMS.Web": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44356",
+      "path": "../../../src/CCMS.Web/CCMS.Web.csproj",
+      "kubernetesService": ".*-web$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 2
+      }
+    }
+  },
+  "containers": {
+    "serviceName": "CCMS-Containers",
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "4.3.4",
+      "isInstalled": true
+    },
+    "Volo.Abp.Account": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/20/2025 08:59:09 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/20/2025 08:59:09 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/20/2025 08:59:09 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/20/2025 08:59:09 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/20/2025 08:59:09 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/20/2025 08:59:09 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/20/2025 08:59:09 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "CCMS.Application": {
+      "path": "src/CCMS.Application/CCMS.Application.abppkg",
+      "folder": "src"
+    },
+    "CCMS.Application.Tests": {
+      "path": "test/CCMS.Application.Tests/CCMS.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "CCMS.Domain.Shared": {
+      "path": "src/CCMS.Domain.Shared/CCMS.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "CCMS.Application.Contracts": {
+      "path": "src/CCMS.Application.Contracts/CCMS.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "CCMS.HttpApi": {
+      "path": "src/CCMS.HttpApi/CCMS.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "CCMS.HttpApi.Client": {
+      "path": "src/CCMS.HttpApi.Client/CCMS.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "CCMS.Web": {
+      "path": "src/CCMS.Web/CCMS.Web.abppkg",
+      "folder": "src"
+    },
+    "CCMS.Web.Tests": {
+      "path": "test/CCMS.Web.Tests/CCMS.Web.Tests.abppkg",
+      "folder": "test"
+    },
+    "CCMS.EntityFrameworkCore.Tests": {
+      "path": "test/CCMS.EntityFrameworkCore.Tests/CCMS.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "CCMS.EntityFrameworkCore": {
+      "path": "src/CCMS.EntityFrameworkCore/CCMS.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "CCMS.TestBase": {
+      "path": "test/CCMS.TestBase/CCMS.TestBase.abppkg",
+      "folder": "test"
+    },
+    "CCMS.Domain.Tests": {
+      "path": "test/CCMS.Domain.Tests/CCMS.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "CCMS.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/CCMS.HttpApi.Client.ConsoleTestApp/CCMS.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "CCMS.DbMigrator": {
+      "path": "src/CCMS.DbMigrator/CCMS.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "CCMS.Domain": {
+      "path": "src/CCMS.Domain/CCMS.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}
