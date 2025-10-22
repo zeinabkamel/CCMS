@@ -1,36 +1,27 @@
 using System;
-using CCMS.Enums;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace CCMS.Stores;
 
-public class RawMaterial : Entity<Guid>
+public class RawMaterial : FullAuditedAggregateRoot<Guid>
 {
-    public Guid StoreId { get; private set; }
-    public string Name { get; private set; } = default!;
-    public string SKU { get; private set; } = default!;
-    public UnitType Unit { get; private set; }
-    public decimal ReorderLevel { get; private set; }
-    public decimal CurrentQty { get; private set; }
-
     protected RawMaterial() { }
-
-    public RawMaterial(Guid id, Guid storeId, string name, string sku, UnitType unit, decimal initialQty, decimal reorderLevel = 0)
-        : base(id)
+    public RawMaterial(Guid id, string name, string sku, string unit, Guid storeId) : base(id)
     {
-        StoreId = storeId;
         Name = name;
         SKU = sku;
         Unit = unit;
-        CurrentQty = initialQty;
-        ReorderLevel = reorderLevel;
+        StoreId = storeId;
     }
 
-    public void Increase(decimal qty) => CurrentQty += qty;
-    public void Decrease(decimal qty)
-    {
-        if (qty <= 0) return;
-        if (CurrentQty - qty < 0) throw new Volo.Abp.BusinessException("Inventory:Insufficient");
-        CurrentQty -= qty;
-    }
+    public string Name { get; set; } = default!;
+    public string SKU { get; set; } = default!;
+    public string Unit { get; set; } = default!;
+    public int Quantity { get; set; }
+    public int? ReorderLevel { get; set; }
+    public decimal? Price { get; set; }
+    public string? SupplierName { get; set; }
+
+    public Guid StoreId { get; set; }
+    public Store? Store { get; set; }
 }

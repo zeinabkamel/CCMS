@@ -35,6 +35,13 @@ public class CCMSPermissionDefinitionProvider : PermissionDefinitionProvider
         store.AddChild(CCMSPermissions.Store.Create, L("Permission:Store.Create"));
         store.AddChild(CCMSPermissions.Store.Update, L("Permission:Store.Update"));
         store.AddChild(CCMSPermissions.Store.Delete, L("Permission:Store.Delete"));
+
+      
+
+        var raw = myGroup.AddPermission(CCMSPermissions.RawMaterials.Default, L("Permission:RawMaterials"));
+        raw.AddChild(CCMSPermissions.RawMaterials.Create, L("Permission:Create"));
+        raw.AddChild(CCMSPermissions.RawMaterials.Update, L("Permission:Update"));
+        raw.AddChild(CCMSPermissions.RawMaterials.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

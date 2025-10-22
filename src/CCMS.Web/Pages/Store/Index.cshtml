@@ -1,7 +1,54 @@
 @page
 @model CCMS.Web.Pages.Store.IndexModel
 @{
-    ViewBag.Title = "Store";
+    ViewBag.Title = "Stores";
 }
-<h2 class="mb-3">Store</h2>
-<p>Scaffold CRUD UI here using ABP TagHelpers and AppServices.</p>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="m-0">@ViewBag.Title</h5>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateModal">Create</button>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr><th>Name</th><th>Location</th><th>Description</th><th style='width:160px;'></th></tr>
+      </thead>
+      <tbody>
+      @if (Model?.Items != null && Model.Items.Any())
+      {
+          foreach (var s in Model.Items)
+          {
+              <tr>
+                <td>@s.Name</td><td>@s.Location</td><td>@s.Description</td>
+                <td class='text-end'>
+                  <button class='btn btn-sm btn-secondary' data-bs-toggle='modal' data-bs-target='#Edit-@s.Id'>Edit</button>
+                  <form method='post' asp-page-handler='Delete' class='d-inline'>
+                    <input type='hidden' name='Id' value='@s.Id' />
+                    <button class='btn btn-sm btn-danger' type='submit'>Delete</button>
+                  </form>
+                </td>
+              </tr>
+              <partial name='Partials/_EditModal' model='s' />
+          }
+      }
+      else { <tr><td colspan='4' class='text-center text-muted'>No stores found.</td></tr> }
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class='modal fade' id='CreateModal' tabindex='-1' aria-hidden='true'>
+  <div class='modal-dialog'><div class='modal-content'>
+    <form method='post' asp-page-handler='Create'>
+      <div class='modal-header'><h5 class='modal-title'>Create Store</h5><button type='button' class='btn-close' data-bs-dismiss='modal'></button></div>
+      <div class='modal-body'>
+        <div class='mb-3'><label class='form-label'>Name</label><input class='form-control' name='Name' required /></div>
+        <div class='mb-3'><label class='form-label'>Location</label><input class='form-control' name='Location' /></div>
+        <div class='mb-3'><label class='form-label'>Description</label><textarea class='form-control' name='Description' rows='3'></textarea></div>
+      </div>
+      <div class='modal-footer'>
+        <button class='btn btn-light' data-bs-dismiss='modal' type='button'>Cancel</button>
+        <button class='btn btn-primary' type='submit'>Save</button>
+      </div>
+    </form>
+  </div></div>
+</div>

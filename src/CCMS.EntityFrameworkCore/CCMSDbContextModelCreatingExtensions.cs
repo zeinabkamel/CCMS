@@ -53,7 +53,9 @@ public static class CCMSDbContextModelCreatingExtensions
         {
             b.ToTable("Stores");
             b.HasKey(x => x.Id);
-            b.Property(x => x.Name).HasMaxLength(128).IsRequired();
+            b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+            b.Property(x => x.Location).HasMaxLength(128);
+            b.Property(x => x.Description).HasMaxLength(1024);
             b.HasMany<RawMaterial>().WithOne().HasForeignKey(x => x.StoreId);
         });
 
@@ -63,6 +65,14 @@ public static class CCMSDbContextModelCreatingExtensions
             b.HasKey(x => x.Id);
             b.Property(x => x.Name).HasMaxLength(128).IsRequired();
             b.Property(x => x.SKU).HasMaxLength(64).IsRequired();
+            b.Property(x => x.Unit).IsRequired().HasMaxLength(32);
+            b.Property(x => x.SupplierName).HasMaxLength(128);
+            b.Property(x => x.Price).HasColumnType("decimal(18,2)");
+            b.HasOne(x => x.Store).WithMany().HasForeignKey(x => x.StoreId);
+
         });
+       
+
+     
     }
 }

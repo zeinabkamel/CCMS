@@ -1,26 +1,19 @@
 using System;
-using System.Collections.Generic;
-using Volo.Abp;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace CCMS.Stores;
 
-public class Store : AggregateRoot<Guid>
+public class Store : FullAuditedAggregateRoot<Guid>
 {
-    public string Name { get; private set; }
-    public string? Location { get; private set; }
-    public bool IsActive { get; private set; } = true;
-
-    private readonly List<RawMaterial> _materials = new();
-    public virtual IReadOnlyCollection<RawMaterial> Materials => _materials.AsReadOnly();
-
     protected Store() { }
-    public Store(Guid id, string name, string? location = null) : base(id)
+    public Store(Guid id, string name, string? location = null, string? description = null) : base(id)
     {
-        Name = Check.NotNullOrWhiteSpace(name, nameof(name), maxLength: 128);
+        Name = name;
         Location = location;
+        Description = description;
     }
 
-    public void Deactivate() => IsActive = false;
-    public void Activate() => IsActive = true;
+    public string Name { get; set; } = default!;
+    public string? Location { get; set; }
+    public string? Description { get; set; }
 }

@@ -1,0 +1,21 @@
+@model CCMS.Stores.RawMaterialDto
+
+<div class='modal fade' id='Edit-@Model.Id' tabindex='-1' aria-hidden='true'>
+  <div class='modal-dialog'><div class='modal-content'>
+    <form method='post' asp-page-handler='Edit'>
+      <div class='modal-header'><h5 class='modal-title'>Edit @Model.Name</h5><button type='button' class='btn-close' data-bs-dismiss='modal'></button></div>
+      <div class='modal-body'>
+        <input type='hidden' name='Id' value='@Model.Id' />
+        <div class='mb-3'><label class='form-label'>Name</label><input class='form-control' name='Name' value='@Model.Name' required /></div>
+        <div class='mb-3'><label class='form-label'>SKU</label><input class='form-control' name='SKU' value='@Model.SKU' required /></div>
+        <div class='mb-3'><label class='form-label'>Unit</label><input class='form-control' name='Unit' value='@Model.Unit' required /></div>
+        <div class='mb-3'><label class='form-label'>Quantity</label><input type='number' step='1' class='form-control' name='Quantity' value='@Model.Quantity' required /></div>
+        <div class='mb-3'><label class='form-label'>Reorder Level</label><input type='number' step='1' class='form-control' name='ReorderLevel' value='@Model.ReorderLevel' /></div>
+        <div class='mb-3'><label class='form-label'>Price</label><input type='number' step='0.01' class='form-control' name='Price' value='@Model.Price' /></div>
+        <div class='mb-3'><label class='form-label'>Supplier</label><input class='form-control' name='SupplierName' value='@Model.SupplierName' /></div>
+        <div class='mb-3'><label class='form-label'>Store Id</label><input class='form-control' name='StoreId' value='@Model.StoreId' required /></div>
+      </div>
+      <div class='modal-footer'><button class='btn btn-light' data-bs-dismiss='modal' type='button'>Cancel</button><button class='btn btn-primary' type='submit'>Save</button></div>
+    </form>
+  </div></div>
+</div>

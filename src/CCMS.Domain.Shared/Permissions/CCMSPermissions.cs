@@ -85,6 +85,7 @@ public static class CCMSPermissions
         public const string ViewAuditLogs = Default + ".ViewAuditLogs";      // سجلات النظام
     }
 
+
     public static readonly string[] All =
 {
     Patients.Default, Patients.Create, Patients.Update, Patients.Delete,

@@ -72,6 +72,12 @@
     "Phone": "الهاتف",
     "Gender": "النوع",
     "Notes": "ملاحظات",
-    "NoPatientsFound": "لا توجد بيانات مرضى"
+    "NoPatientsFound": "لا توجد بيانات مرضى",
+     "Permission:RawMaterials": "الخامات",
+    "Permission:Create": "إضافة",
+    "Permission:Update": "تعديل",
+    "Permission:Delete": "حذف",
+    "Stores": "المخازن",
+    "RawMaterials": "الخامات"
   }
 }
