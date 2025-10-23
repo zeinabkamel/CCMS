@@ -81,7 +81,8 @@
     "RawMaterials": "الخامات",
     "Sessions": "الجلسات",
     "Staff": "الطاقم",
-    "Doctors": "الأطباء"
- 
+    "Doctors": "الأطباء",
+     "Permission:Doctors": "الأطباء"
+
   }
 }

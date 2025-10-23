@@ -88,11 +88,7 @@ public class CCMSMenuContributor : IMenuContributor
                 l["Menu:Staff"],
                 url: "/Staff"
             ).RequirePermissions(CCMSPermissions.Staff.Default))
-            .AddItem(new ApplicationMenuItem(
-                "CCMS.Doctors",
-                l["Menu:Doctors"],
-                url: "/Doctors"
-            ).RequirePermissions(CCMSPermissions.Staff.Default))
+
             .AddItem(new ApplicationMenuItem(
                 "CCMS.Sessions",
                 l["Menu:Sessions"],
