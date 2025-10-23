@@ -92,6 +92,10 @@ public static class CCMSPermissions
         public const string Update = Default + ".Update";
         public const string Delete = Default + ".Delete";
     }
+    public static class Dashboard
+    {
+        public const string Default = GroupName + ".Dashboard";
+    }
 
     public static readonly string[] All =
 {

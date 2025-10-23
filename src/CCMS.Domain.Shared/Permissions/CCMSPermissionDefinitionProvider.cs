@@ -51,6 +51,10 @@ public class CCMSPermissionDefinitionProvider : PermissionDefinitionProvider
         doctors.AddChild(CCMSPermissions.Doctors.Create, L("Permission:Create"));
         doctors.AddChild(CCMSPermissions.Doctors.Update, L("Permission:Update"));
         doctors.AddChild(CCMSPermissions.Doctors.Delete, L("Permission:Delete"));
+        var group = context.GetGroupOrNull(CCMSPermissions.GroupName)
+                 ?? context.AddGroup(CCMSPermissions.GroupName, L("Permission:CCMS"));
+
+        group.AddPermission(CCMSPermissions.Dashboard.Default, L("Permission:Dashboard"));
     }
 
     private static LocalizableString L(string name)

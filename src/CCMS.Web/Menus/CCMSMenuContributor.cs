@@ -70,6 +70,16 @@ public class CCMSMenuContributor : IMenuContributor
                 ).RequirePermissions(CCMSPermissions.Books.Default) 
             )
         );
+        context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "CCMS.Dashboard",
+        l["Dashboard"],
+        url: "/Dashboard",
+        icon: "fa fa-chart-line",
+        order: 0
+    ).RequirePermissions(CCMSPermissions.Dashboard.Default)
+);
+
         // CCMS Root Menu
         context.Menu.AddItem(
             new ApplicationMenuItem(
