@@ -23,17 +23,25 @@ public class CCMSMenuContributor : IMenuContributor
     private static Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
         var l = context.GetLocalizer<CCMSResource>();
-
-        //Home
         context.Menu.AddItem(
-            new ApplicationMenuItem(
-                CCMSMenus.Home,
-                l["Menu:Home"],
-                "~/",
-                icon: "fa fa-home",
-                order: 1
-            )
-        );
+new ApplicationMenuItem(
+ "CCMS.Dashboard",
+ l["Dashboard"],
+ url: "/Dashboard",
+ icon: "fa fa-chart-line",
+ order: 1
+).RequirePermissions(CCMSPermissions.Dashboard.Default)
+);
+        //Home
+        //context.Menu.AddItem(
+        //    new ApplicationMenuItem(
+        //        CCMSMenus.Home,
+        //        l["Menu:Home"],
+        //        "~/",
+        //        icon: "fa fa-home",
+        //        order: 1
+        //    )
+        //);
 
 
         //Administration
@@ -57,28 +65,20 @@ public class CCMSMenuContributor : IMenuContributor
         //Administration->Settings
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 7);
     
-        context.Menu.AddItem(
-            new ApplicationMenuItem(
-                "BooksStore",
-                l["Menu:CCMS"],
-                icon: "fa fa-book"
-            ).AddItem(
-            new ApplicationMenuItem(
-                "BooksStore.Books",
-                l["Menu:Books"],
-                url: "/Books"
-                ).RequirePermissions(CCMSPermissions.Books.Default) 
-            )
-        );
-        context.Menu.AddItem(
-    new ApplicationMenuItem(
-        "CCMS.Dashboard",
-        l["Dashboard"],
-        url: "/Dashboard",
-        icon: "fa fa-chart-line",
-        order: 0
-    ).RequirePermissions(CCMSPermissions.Dashboard.Default)
-);
+        //context.Menu.AddItem(
+        //    new ApplicationMenuItem(
+        //        "BooksStore",
+        //        l["Menu:CCMS"],
+        //        icon: "fa fa-book"
+        //    ).AddItem(
+        //    new ApplicationMenuItem(
+        //        "BooksStore.Books",
+        //        l["Menu:Books"],
+        //        url: "/Books"
+        //        ).RequirePermissions(CCMSPermissions.Books.Default) 
+        //    )
+        //);
+ 
 
         // CCMS Root Menu
         context.Menu.AddItem(
