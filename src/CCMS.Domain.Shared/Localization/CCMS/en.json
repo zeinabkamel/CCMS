@@ -65,11 +65,15 @@
     "Gender": "Gender",
     "Notes": "Notes",
     "NoPatientsFound": "No patients found.",
-     "Permission:RawMaterials": "Raw Materials",
+    "Permission:RawMaterials": "Raw Materials",
     "Permission:Create": "Create",
     "Permission:Update": "Update",
     "Permission:Delete": "Delete",
     "Stores": "Stores",
-    "RawMaterials": "Raw Materials"
+    "RawMaterials": "Raw Materials",
+    "Sessions": "Sessions",
+    "Staff": "Staff",
+    "Doctors": "Doctors",
+    "Permission:Doctors": "Doctors"
   }
 }

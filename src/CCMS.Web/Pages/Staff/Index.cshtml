@@ -1,7 +1,51 @@
 @page
 @model CCMS.Web.Pages.Staff.IndexModel
-@{
-    ViewBag.Title = "Staff";
-}
-<h2 class="mb-3">Staff</h2>
-<p>Scaffold CRUD UI here using ABP TagHelpers and AppServices.</p>
+@{ ViewBag.Title = "Staff"; }
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="m-0">@ViewBag.Title</h5>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateModal">Create</button>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr><th>Name</th><th>Role</th><th>Phone</th><th>Active</th><th style='width:160px;'></th></tr>
+      </thead>
+      <tbody>
+      @if (Model.Items.Any()) {
+        foreach (var s in Model.Items) {
+          <tr>
+            <td>@s.FullName</td><td>@s.Role</td><td>@s.Phone</td><td>@(s.IsActive ? "Yes" : "No")</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#Edit-@s.Id">Edit</button>
+              <form method="post" asp-page-handler="Delete" class="d-inline">
+                <input type="hidden" name="id" value="@s.Id" />
+                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <partial name="Partials/_EditModal" model="s" />
+        }
+      } else { <tr><td colspan="5" class="text-center text-muted">No staff.</td></tr>}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="CreateModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><div class="modal-content">
+    <form method="post" asp-page-handler="Create">
+      <div class="modal-header"><h5 class="modal-title">Create Staff</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3"><label class="form-label">Full Name</label><input class="form-control" name="FullName" required /></div>
+        <div class="mb-3"><label class="form-label">Role</label><input class="form-control" name="Role" placeholder="e.g. 1=Doctor" required /></div>
+        <div class="mb-3"><label class="form-label">Phone</label><input class="form-control" name="Phone" /></div>
+        <div class="mb-3"><label class="form-label">UserId</label><input class="form-control" name="UserId" /></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-light" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div></div>
+</div>

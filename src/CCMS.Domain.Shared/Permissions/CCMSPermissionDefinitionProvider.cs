@@ -30,7 +30,9 @@ public class CCMSPermissionDefinitionProvider : PermissionDefinitionProvider
         var sessions = myGroup.AddPermission(CCMSPermissions.Sessions.Default, L("Permission:Sessions"));
         //sessions.AddChild(CCMSPermissions.Sessions.Complete, L("Permission:Sessions.Complete"));
         sessions.AddChild(CCMSPermissions.Sessions.Delete, L("Permission:Sessions.Delete"));
-
+        sessions.AddChild(CCMSPermissions.Sessions.Create, L("Permission:Create"));
+        sessions.AddChild(CCMSPermissions.Sessions.Update, L("Permission:Update"));
+ 
         var store = myGroup.AddPermission(CCMSPermissions.Store.Default, L("Permission:Store"));
         store.AddChild(CCMSPermissions.Store.Create, L("Permission:Store.Create"));
         store.AddChild(CCMSPermissions.Store.Update, L("Permission:Store.Update"));
@@ -42,6 +44,13 @@ public class CCMSPermissionDefinitionProvider : PermissionDefinitionProvider
         raw.AddChild(CCMSPermissions.RawMaterials.Create, L("Permission:Create"));
         raw.AddChild(CCMSPermissions.RawMaterials.Update, L("Permission:Update"));
         raw.AddChild(CCMSPermissions.RawMaterials.Delete, L("Permission:Delete"));
+ 
+ 
+
+        var doctors = myGroup.AddPermission(CCMSPermissions.Doctors.Default, L("Permission:Doctors"));
+        doctors.AddChild(CCMSPermissions.Doctors.Create, L("Permission:Create"));
+        doctors.AddChild(CCMSPermissions.Doctors.Update, L("Permission:Update"));
+        doctors.AddChild(CCMSPermissions.Doctors.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

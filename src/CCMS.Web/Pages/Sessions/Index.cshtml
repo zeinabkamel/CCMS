@@ -1,7 +1,140 @@
 @page
 @model CCMS.Web.Pages.Sessions.IndexModel
 @{
-    ViewBag.Title = "Sessions";
+  ViewBag.Title = "Sessions";
 }
-<h2 class="mb-3">Sessions</h2>
-<p>Scaffold CRUD UI here using ABP TagHelpers and AppServices.</p>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="m-0">@ViewBag.Title</h5>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateModal">Create</button>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Patient</th><th>Doctor</th><th>Type</th><th>Status</th>
+          <th>Scheduled</th><th>Duration</th><th style="width:160px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (Model.Items.Any())
+        {
+          foreach (var s in Model.Items)
+          {
+            <tr>
+              <td>@Model.PatientLookup(s.PatientId)</td>
+              <td>@Model.DoctorLookup(s.DoctorStaffId)</td>
+              <td>@s.Type</td>
+              <td>@s.Status</td>
+              <td>@s.ScheduledAt</td>
+              <td>@s.DurationMins min</td>
+              <td class="text-end">
+                <form method="post" asp-page-handler="Complete" class="d-inline">
+                  <input type="hidden" name="id" value="@s.Id" />
+                  <button class="btn btn-sm btn-success" type="submit">Complete</button>
+                </form>
+                <form method="post" asp-page-handler="Delete" class="d-inline">
+                  <input type="hidden" name="id" value="@s.Id" />
+                  <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          }
+        }
+        else
+        {
+          <tr><td colspan="7" class="text-center text-muted">No sessions found.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="CreateModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><div class="modal-content">
+    <form method="post" asp-page-handler="Create">
+      <div class="modal-header"><h5 class="modal-title">Create Session</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Patient</label>
+          <select class="form-select" name="PatientId" required>
+            <option value="" disabled selected>Choose patient...</option>
+            @foreach (var p in Model.Patients){ <option value="@p.Id">@p.FullName</option> }
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Doctor</label>
+          <select class="form-select" name="DoctorStaffId" required>
+            <option value="" disabled selected>Choose doctor...</option>
+            @foreach (var d in Model.Doctors){ <option value="@d.Id">@d.FullName</option> }
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Type</label>
+          <select class="form-select" name="Type" required>
+            <option value="0">Diagnosis</option>
+            <option value="1">Treatment</option>
+            <option value="2">FollowUp</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Scheduled At</label>
+          <input type="datetime-local" class="form-control" name="ScheduledAt" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Duration (mins)</label>
+          <input type="number" class="form-control" name="DurationMins" value="30" min="5" max="1440" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Notes</label>
+          <textarea class="form-control" name="Notes" rows="3"></textarea>
+        </div>
+
+        <div class="border rounded p-2">
+          <div class="fw-bold mb-2">Materials (optional)</div>
+          <div id="rm-container">
+            <div class="row g-2 mb-2 rm-row">
+              <div class="col-8">
+                <select class="form-select" name="Materials[0].RawMaterialId">
+                  <option value="" disabled selected>Raw material...</option>
+                  @foreach (var m in Model.RawMaterials){ <option value="@m.Id">@m.Name</option> }
+                </select>
+              </div>
+              <div class="col-4">
+                <input type="number" step="0.01" class="form-control" name="Materials[0].QtyUsed" placeholder="Qty" />
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addRmRow()">+ Add</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-light" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div></div>
+</div>
+
+<script>
+let rmIndex = 1;
+function addRmRow(){
+  const c = document.getElementById('rm-container');
+  const row = document.createElement('div');
+  row.className = 'row g-2 mb-2 rm-row';
+  const options = `@foreach (var m in Model.RawMaterials){<text><option value="@m.Id">@m.Name</option></text>}`;
+  row.innerHTML = `
+    <div class="col-8">
+      <select class="form-select" name="Materials[\${rmIndex}].RawMaterialId">
+        <option value="" disabled selected>Raw material...</option>
+        ${options}
+      </select>
+    </div>
+    <div class="col-4">
+      <input type="number" step="0.01" class="form-control" name="Materials[\${rmIndex}].QtyUsed" placeholder="Qty" />
+    </div>`;
+  c.appendChild(row);
+  rmIndex++;
+}
+</script>

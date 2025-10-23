@@ -1,0 +1,58 @@
+@page
+@model CCMS.Web.Pages.DoctorProfiles.IndexModel
+@{ ViewBag.Title = "Doctors"; }
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="m-0">@ViewBag.Title</h5>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateModal">Create</button>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr><th>Staff</th><th>Specialty</th><th>License</th><th style='width:160px;'></th></tr>
+      </thead>
+      <tbody>
+      @if (Model.Items.Any()) {
+        foreach (var d in Model.Items) {
+          var staffName = Model.StaffLookup.TryGetValue(d.StaffId, out var n) ? n : d.StaffId.ToString();
+          <tr>
+            <td>@staffName</td><td>@d.Specialty</td><td>@d.LicenseNo</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#Edit-@d.Id">Edit</button>
+              <form method="post" asp-page-handler="Delete" class="d-inline">
+                <input type="hidden" name="id" value="@d.Id" />
+                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <partial name="Partials/_EditModal" model="d" />
+        }
+      } else { <tr><td colspan="4" class="text-center text-muted">No doctors.</td></tr>}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="CreateModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><div class="modal-content">
+    <form method="post" asp-page-handler="Create">
+      <div class="modal-header"><h5 class="modal-title">Create Doctor</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Staff</label>
+          <select class="form-select" name="StaffId" required>
+            <option value="" disabled selected>Choose staff...</option>
+            @foreach (var s in Model.Staff){ <option value="@s.Id">@s.FullName</option> }
+          </select>
+        </div>
+        <div class="mb-3"><label class="form-label">Specialty</label><input class="form-control" name="Specialty" /></div>
+        <div class="mb-3"><label class="form-label">License No</label><input class="form-control" name="LicenseNo" /></div>
+        <div class="mb-3"><label class="form-label">Bio</label><textarea class="form-control" name="Bio" rows="3"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-light" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div></div>
+</div>

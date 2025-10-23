@@ -28,25 +28,38 @@ public static class CCMSDbContextModelCreatingExtensions
             b.HasKey(x => x.Id);
             b.Property(x => x.FullName).HasMaxLength(128).IsRequired();
             b.HasOne(x => x.DoctorProfile).WithOne().HasForeignKey<Staff>(x => x.DoctorProfileId);
-        });
+         });
 
         builder.Entity<DoctorProfile>(b =>
         {
             b.ToTable("DoctorProfiles");
             b.HasKey(x => x.Id);
+            b.Property(x => x.Specialty).HasMaxLength(128);
+            b.Property(x => x.LicenseNo).HasMaxLength(64);
+            b.Property(x => x.Bio).HasMaxLength(2048);
+
         });
 
         builder.Entity<Session>(b =>
         {
             b.ToTable("Sessions");
             b.HasKey(x => x.Id);
-            b.HasMany<SessionMaterial>().WithOne().HasForeignKey(x => x.SessionId);
+         
+
+            b.Property(x => x.DurationMins).IsRequired();
+            b.Property(x => x.Notes).HasMaxLength(2048);
+            b.HasMany<SessionMaterial>(x => x.Materials)
+               .WithOne()
+               .HasForeignKey(x => x.SessionId)
+               .OnDelete(DeleteBehavior.Cascade);
+            b.Navigation(x => x.Materials).UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
         builder.Entity<SessionMaterial>(b =>
         {
             b.ToTable("SessionMaterials");
             b.HasKey(x => x.Id);
+            b.Property(x => x.QtyUsed).HasColumnType("decimal(18,2)");
         });
 
         builder.Entity<Store>(b =>
@@ -71,8 +84,13 @@ public static class CCMSDbContextModelCreatingExtensions
             b.HasOne(x => x.Store).WithMany().HasForeignKey(x => x.StoreId);
 
         });
-       
+    
+
+      
+ 
 
      
+
+
     }
 }

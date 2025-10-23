@@ -85,6 +85,13 @@ public static class CCMSPermissions
         public const string ViewAuditLogs = Default + ".ViewAuditLogs";      // سجلات النظام
     }
 
+    public static class Doctors
+    {
+        public const string Default = GroupName + ".Doctors";
+        public const string Create = Default + ".Create";
+        public const string Update = Default + ".Update";
+        public const string Delete = Default + ".Delete";
+    }
 
     public static readonly string[] All =
 {
