@@ -1,4 +1,3 @@
-
 @page
 @model CCMS.Web.Pages.Dashboard.IndexModel
 @{
@@ -9,171 +8,171 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <div class="card mb-3">
-  <div class="card-body">
-    <form class="row g-2 align-items-end" method="get">
-      <div class="col-md-3">
-        <label class="form-label">From</label>
-        <input class="form-control" type="date" name="From" value="@(Model.From?.ToString("yyyy-MM-dd"))" />
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">To</label>
-        <input class="form-control" type="date" name="To" value="@(Model.To?.ToString("yyyy-MM-dd"))" />
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Doctor</label>
-        <select class="form-select" name="DoctorStaffId">
-          <option value="">All</option>
-          @foreach (var d in Model.Doctors)
-          {
-              <option value="@d.Id" selected="@(Model.DoctorStaffId == d.Id)">@d.FullName</option>
-          }
-        </select>
-      </div>
-      <div class="col-md-2 form-check ms-2">
-        <input class="form-check-input" type="checkbox" name="OnlyMine" value="true" @(Model.OnlyMine ? "checked" : "") id="onlyMineChk" />
-        <label class="form-check-label" for="onlyMineChk">Only my sessions</label>
-      </div>
-      <div class="col-md-12 text-end mt-2">
-        <button class="btn btn-secondary me-2" type="submit">Filter</button>
-        <a class="btn btn-outline-secondary me-2" href="/Dashboard">Reset</a>
-        <a class="btn btn-outline-primary me-2" asp-page-handler="ExportCsv"
-           asp-route-From="@(Model.From?.ToString("yyyy-MM-dd"))"
-           asp-route-To="@(Model.To?.ToString("yyyy-MM-dd"))"
-           asp-route-DoctorStaffId="@Model.DoctorStaffId"
-           asp-route-OnlyMine="@Model.OnlyMine">
-           Export CSV
-        </a>
-        <a class="btn btn-primary" asp-page-handler="ExportExcel"
-           asp-route-From="@(Model.From?.ToString("yyyy-MM-dd"))"
-           asp-route-To="@(Model.To?.ToString("yyyy-MM-dd"))"
-           asp-route-DoctorStaffId="@Model.DoctorStaffId"
-           asp-route-OnlyMine="@Model.OnlyMine">
-           Export Excel
-        </a>
-      </div>
-    </form>
-  </div>
+    <div class="card-body">
+        <form class="row g-2 align-items-end" method="get">
+            <div class="col-md-3">
+                <label class="form-label">From</label>
+                <input class="form-control" type="date" name="From" value="@(Model.From?.ToString("yyyy-MM-dd"))" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">To</label>
+                <input class="form-control" type="date" name="To" value="@(Model.To?.ToString("yyyy-MM-dd"))" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Doctor</label>
+                <select class="form-select" name="DoctorStaffId">
+                    <option value="">All</option>
+                    @foreach (var d in Model.Doctors)
+                    {
+                        <option value="@d.Id" selected="@(Model.DoctorStaffId == d.Id)">@d.FullName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2 form-check ms-2">
+                <input class="form-check-input" type="checkbox" name="OnlyMine" value="true" @(Model.OnlyMine ? "checked" : "") id="onlyMineChk" />
+                <label class="form-check-label" for="onlyMineChk">Only my sessions</label>
+            </div>
+            <div class="col-md-12 text-end mt-2">
+                <button class="btn btn-secondary me-2" type="submit">Filter</button>
+                <a class="btn btn-outline-secondary me-2" href="/Dashboard">Reset</a>
+                <a class="btn btn-outline-primary me-2" asp-page-handler="ExportCsv"
+                   asp-route-From="@(Model.From?.ToString("yyyy-MM-dd"))"
+                   asp-route-To="@(Model.To?.ToString("yyyy-MM-dd"))"
+                   asp-route-DoctorStaffId="@Model.DoctorStaffId"
+                   asp-route-OnlyMine="@Model.OnlyMine">
+                    Export CSV
+                </a>
+                <a class="btn btn-primary" asp-page-handler="ExportExcel"
+                   asp-route-From="@(Model.From?.ToString("yyyy-MM-dd"))"
+                   asp-route-To="@(Model.To?.ToString("yyyy-MM-dd"))"
+                   asp-route-DoctorStaffId="@Model.DoctorStaffId"
+                   asp-route-OnlyMine="@Model.OnlyMine">
+                    Export Excel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="row g-3">
-  <div class="col-md-3">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <div class="text-muted small">Total Sessions</div>
-        <div class="display-6 fw-bold">@Model.Vm.TotalSessions</div>
-        <div class="text-muted small">@Model.Vm.From:dd/MM/yyyy - @Model.Vm.To:dd/MM/yyyy</div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <div class="text-muted small">My Sessions</div>
-        <div class="display-6 fw-bold">@Model.Vm.MySessions</div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card shadow-sm border-success">
-      <div class="card-body">
-        <div class="text-muted small">Completed</div>
-        <div class="display-6 fw-bold text-success">@Model.Vm.CompletedSessions</div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card shadow-sm border-danger">
-      <div class="card-body">
-        <div class="text-muted small">Canceled</div>
-        <div class="display-6 fw-bold text-danger">@Model.Vm.CanceledSessions</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row g-3 mt-1">
-  <div class="col-md-3">
-    <div class="card shadow-sm border-info">
-      <div class="card-body">
-        <div class="text-muted small">Avg / Doctor</div>
-        <div class="display-6 fw-bold text-info">@Model.Vm.AvgSessionsPerDoctor</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row g-3 mt-1">
-  <div class="col-lg-6">
-    <div class="card shadow-sm h-100">
-      <div class="card-header fw-bold">Top Raw Materials</div>
-      <div class="card-body"><canvas id="matChart" style="height:320px"></canvas></div>
-    </div>
-  </div>
-  <div class="col-lg-6">
-    <div class="card shadow-sm h-100">
-      <div class="card-header fw-bold">Sessions per Doctor</div>
-      <div class="card-body">
-        <canvas id="docChart" style="height:320px"></canvas>
-
-        <div class="mt-3">
-          @for (var i = 0; i < Model.Vm.DoctorsLabels.Length; i++)
-          {
-              var name = Model.Vm.DoctorsLabels[i];
-              var val = Model.Vm.DoctorsValues[i];
-              var pct = Model.Vm.MaxDoctorSessions > 0 ? (val / Model.Vm.MaxDoctorSessions) * 100.0 : 0;
-              <div class="mb-2">
-                <div class="d-flex justify-content-between">
-                  <small class="text-muted">@name</small>
-                  <small class="text-muted">@val</small>
-                </div>
-                <div class="progress" style="height:8px;">
-                  <div class="progress-bar" role="progressbar" style="width:@pct%" aria-valuenow="@val" aria-valuemin="0" aria-valuemax="@Model.Vm.MaxDoctorSessions"></div>
-                </div>
-              </div>
-          }
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small">Total Sessions</div>
+                <div class="display-6 fw-bold">@Model.Vm.TotalSessions</div>
+                <div class="text-muted small">@Model.Vm.From:dd/MM/yyyy - @Model.Vm.To:dd/MM/yyyy</div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small">My Sessions</div>
+                <div class="display-6 fw-bold">@Model.Vm.MySessions</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-success">
+            <div class="card-body">
+                <div class="text-muted small">Completed</div>
+                <div class="display-6 fw-bold text-success">@Model.Vm.CompletedSessions</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-danger">
+            <div class="card-body">
+                <div class="text-muted small">Canceled</div>
+                <div class="display-6 fw-bold text-danger">@Model.Vm.CanceledSessions</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row g-3 mt-1">
-  <div class="col-lg-6">
-    <div class="card shadow-sm h-100">
-      <div class="card-header fw-bold">Completed vs Canceled</div>
-      <div class="card-body d-flex justify-content-center align-items-center">
-        <canvas id="pieChart" style="max-width:420px; max-height:320px;"></canvas>
-      </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-info">
+            <div class="card-body">
+                <div class="text-muted small">Avg / Doctor</div>
+                <div class="display-6 fw-bold text-info">@Model.Vm.AvgSessionsPerDoctor</div>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">Top Raw Materials</div>
+            <div class="card-body"><canvas id="matChart" style="height:320px"></canvas></div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">Sessions per Doctor</div>
+            <div class="card-body">
+                <canvas id="docChart" style="height:320px"></canvas>
+
+                <div class="mt-3">
+                    @for (var i = 0; i < Model.Vm.DoctorsLabels.Length; i++)
+                    {
+                        var name = Model.Vm.DoctorsLabels[i];
+                        var val = Model.Vm.DoctorsValues[i];
+                        var pct = Model.Vm.MaxDoctorSessions > 0 ? (val / Model.Vm.MaxDoctorSessions) * 100.0 : 0;
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">@name</small>
+                                <small class="text-muted">@val</small>
+                            </div>
+                            <div class="progress" style="height:8px;">
+                                <div class="progress-bar" role="progressbar" style="width:@pct%" aria-valuenow="@val" aria-valuemin="0" aria-valuemax="@Model.Vm.MaxDoctorSessions"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">Completed vs Canceled</div>
+            <div class="card-body d-flex justify-content-center align-items-center">
+                <canvas id="pieChart" style="max-width:420px; max-height:320px;"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-  const matsLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.MaterialsLabels));
-  const matsValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.MaterialsValues));
-  const docsLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.DoctorsLabels));
-  const docsValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.DoctorsValues));
-  const completed = @Model.Vm.CompletedSessions;
-  const canceled = @Model.Vm.CanceledSessions;
+    const matsLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.MaterialsLabels));
+    const matsValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.MaterialsValues));
+    const docsLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.DoctorsLabels));
+    const docsValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Vm.DoctorsValues));
+    const completed = @Model.Vm.CompletedSessions;
+    const canceled = @Model.Vm.CanceledSessions;
 
-  new Chart(document.getElementById('matChart'), {
-    type: 'bar',
-    data: { labels: matsLabels, datasets: [{ label: 'Qty Used', data: matsValues }]},
-    options: { responsive: true, maintainAspectRatio: false }
-  });
+    new Chart(document.getElementById('matChart'), {
+      type: 'bar',
+      data: { labels: matsLabels, datasets: [{ label: 'Qty Used', data: matsValues }]},
+      options: { responsive: true, maintainAspectRatio: false }
+    });
 
-  new Chart(document.getElementById('docChart'), {
-    type: 'bar',
-    data: { labels: docsLabels, datasets: [{ label: 'Sessions', data: docsValues }]},
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
-  });
+    new Chart(document.getElementById('docChart'), {
+      type: 'bar',
+      data: { labels: docsLabels, datasets: [{ label: 'Sessions', data: docsValues }]},
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+    });
 
-  new Chart(document.getElementById('pieChart'), {
-    type: 'pie',
-    data: {
-      labels: ['Completed', 'Canceled'],
-      datasets: [{ data: [completed, canceled] }]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
-  });
+    new Chart(document.getElementById('pieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Completed', 'Canceled'],
+        datasets: [{ data: [completed, canceled] }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
 </script>
