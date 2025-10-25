@@ -146,7 +146,7 @@ namespace CCMS.Web;
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
-
+         
         Configure<PermissionManagementOptions>(options =>
         {
             options.IsDynamicPermissionStoreEnabled = true;
@@ -236,11 +236,13 @@ namespace CCMS.Web;
         Configure<AbpNavigationOptions>(options =>
         {
             options.MenuContributors.Add(new CCMSMenuContributor());
+
         });
 
         Configure<AbpToolbarOptions>(options =>
         {
             options.Contributors.Add(new CCMSToolbarContributor());
+
         });
     }
 
