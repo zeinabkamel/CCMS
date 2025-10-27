@@ -12,15 +12,18 @@ public class Patient : AggregateRoot<Guid>
     public string? Gender { get; private set; } // optional: code or enum
     public DateTime? Dob { get; private set; }
     public string? Notes { get; private set; }
-
-    protected Patient() { }
-
-    public Patient(Guid id, string code, string fullName, string phone) : base(id)
+    public Patient(Guid id, string code, string fullName, string? phone = null,
+        string? notes=null) : base(id)
     {
         Code = Check.NotNullOrWhiteSpace(code, nameof(code), maxLength: 32);
         FullName = Check.NotNullOrWhiteSpace(fullName, nameof(fullName), maxLength: 128);
-        Phone = Check.NotNullOrWhiteSpace(phone, nameof(phone), maxLength: 32);
+        Phone = string.IsNullOrWhiteSpace(phone) ? "N/A" : phone;
+        Notes = notes;
     }
+
+    protected Patient() { }
+
+    
 
     public void Update(string fullName, string phone, string? gender = null, DateTime? dob = null, string? notes = null)
     {
