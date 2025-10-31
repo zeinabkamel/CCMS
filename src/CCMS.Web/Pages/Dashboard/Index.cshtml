@@ -83,7 +83,7 @@
             <div class="card-body">
                 <div class="text-muted small">Total Sessions</div>
                 <div class="display-6 fw-bold">@Model.Vm.TotalSessions</div>
-                <div class="text-muted small">@Model.Vm.From:dd/MM/yyyy - @Model.Vm.To:dd/MM/yyyy</div>
+                <div class="text-muted small">@Model.Vm.From.ToString("dd/MM/yyyy HH:mm") - @Model.Vm.To.ToString("dd/MM/yyyy HH:mm")</div>
             </div>
         </div>
     </div>
