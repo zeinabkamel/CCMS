@@ -25,8 +25,30 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Gender</label>
-                        <input class="form-control" name="Gender" value="@Model.Gender" />
+                        <select class="form-control" name="Gender" required>
+                            <option value="">Select Gender</option>
+                            @if (Model.Gender == "Male")
+                            {
+                                <option value="Male" selected>Male</option>
+                            }
+                            else
+                            {
+                                <option value="Male">Male</option>
+                            }
+
+                            @if (Model.Gender == "Female")
+                            {
+                                <option value="Female" selected>Female</option>
+                            }
+                            else
+                            {
+                                <option value="Female">Female</option>
+                            }
+                        </select>
                     </div>
+
+
+
                     <div class="mb-3">
                         <label class="form-label">Notes</label>
                         <textarea class="form-control" name="Notes" rows="3">@Model.Notes</textarea>

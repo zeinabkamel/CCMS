@@ -82,8 +82,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">@L["Gender"]</label>
-                        <input class="form-control" name="Gender" />
+                        <select class="form-control" name="Gender" required>
+                            <option value="">@L["SelectGender"]</option>
+                            <option value="Male">@L["Male"]</option>
+                            <option value="Female">@L["Female"]</option>
+                        </select>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">@L["Notes"]</label>
                         <textarea class="form-control" name="Notes" rows="3"></textarea>

@@ -82,7 +82,11 @@
     "Sessions": "الجلسات",
     "Staff": "الطاقم",
     "Doctors": "الأطباء",
-     "Permission:Doctors": "الأطباء"
+    "Permission:Doctors": "الأطباء",
+    "SelectGender": "اختر الجنس",
+    "Male": "ذكر",
+    "Female": "أنثى"
+
 
   }
 }

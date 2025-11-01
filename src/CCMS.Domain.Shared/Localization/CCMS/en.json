@@ -74,7 +74,11 @@
     "Sessions": "Sessions",
     "Staff": "Staff",
     "Doctors": "Doctors",
-    "Permission:Doctors": "Doctors"
- 
+    "Permission:Doctors": "Doctors",
+    "SelectGender": "Select Gender",
+    "Male": "Male",
+    "Female": "Female"
+
+
   }
 }

@@ -1,3 +1,4 @@
+@using CCMS.Enums
 @model CCMS.Staffing.StaffDto
 
 <div class='modal fade' id='Edit-@Model.Id' tabindex='-1' aria-hidden='true'>
@@ -7,7 +8,51 @@
       <div class='modal-body'>
         <input type='hidden' name='Id' value='@Model.Id' />
         <div class='mb-3'><label class='form-label'>Full Name</label><input class='form-control' name='FullName' value='@Model.FullName' required /></div>
-        <div class='mb-3'><label class='form-label'>Role</label><input class='form-control' name='Role' value='@Model.Role' required /></div>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select class="form-control" name="Role" required>
+                            <option value="">Select Role</option>
+
+                            @if (Model.Role == (int)StaffRole.Manager)
+                            {
+                                <option value="0" selected>Manager</option>
+                            }
+                            else
+                            {
+                                <option value="0">Manager</option>
+                            }
+
+                            @if (Model.Role == (int)StaffRole.Doctor)
+                            {
+                                <option value="1" selected>Doctor</option>
+                            }
+                            else
+                            {
+                                <option value="1">Doctor</option>
+                            }
+
+                            @if (Model.Role == (int)StaffRole.Receptionist)
+                            {
+                                <option value="2" selected>Receptionist</option>
+                            }
+                            else
+                            {
+                                <option value="2">Receptionist</option>
+                            }
+
+                            @if (Model.Role == (int)StaffRole.StoreKeeper)
+                            {
+                                <option value="3" selected>Store Keeper</option>
+                            }
+                            else
+                            {
+                                <option value="3">Store Keeper</option>
+                            }
+                        </select>
+                    </div>
+
+
+
         <div class='mb-3'><label class='form-label'>Phone</label><input class='form-control' name='Phone' value='@Model.Phone' /></div>
         <div class='mb-3'><label class='form-label'>UserId</label><input class='form-control' name='UserId' value='@Model.UserId' /></div>
       </div>
