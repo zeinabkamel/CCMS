@@ -1,55 +1,53 @@
-using System.IO;
+﻿using CCMS.EntityFrameworkCore;
+using CCMS.Localization;
+using CCMS.MultiTenancy;
+using CCMS.Permissions;
+using CCMS.Web.HealthChecks;
+using CCMS.Web.Menus;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CCMS.EntityFrameworkCore;
-using CCMS.Localization;
-using CCMS.MultiTenancy;
-using CCMS.Permissions;
-using CCMS.Web.Menus;
-using CCMS.Web.HealthChecks;
 using Microsoft.OpenApi.Models;
+using OpenIddict.Server.AspNetCore;
+using OpenIddict.Validation.AspNetCore;
+using System;
+using System.IO;
 using Volo.Abp;
-using Volo.Abp.Studio;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
-using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
-using Volo.Abp.PermissionManagement.Web;
-using Volo.Abp.UI.Navigation.Urls;
-using Volo.Abp.UI;
-using Volo.Abp.UI.Navigation;
-using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.Identity.Web;
-using Volo.Abp.FeatureManagement;
-using OpenIddict.Server.AspNetCore;
-using OpenIddict.Validation.AspNetCore;
-using Volo.Abp.TenantManagement.Web;
-using System;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.Autofac;
+using Volo.Abp.AutoMapper;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
-using Volo.Abp.Swashbuckle;
+using Volo.Abp.Identity.Web;
+using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Web;
+using Volo.Abp.Studio;
 using Volo.Abp.Studio.Client.AspNetCore;
+using Volo.Abp.Swashbuckle;
+using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Urls;
+using Volo.Abp.VirtualFileSystem;
 
 namespace CCMS.Web;
 
@@ -65,11 +63,10 @@ namespace CCMS.Web;
     typeof(AbpTenantManagementWebModule),
     typeof(AbpFeatureManagementWebModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreSerilogModule)
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAspNetCoreMvcUiBootstrapModule)
 )]
-[DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
-
-    public class CCMSWebModule : AbpModule
+public class CCMSWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -88,6 +85,7 @@ namespace CCMS.Web;
             );
         });
 
+        // ----------- Validation configuration -----------
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -98,19 +96,33 @@ namespace CCMS.Web;
             });
         });
 
-        if (!hostingEnvironment.IsDevelopment())
+        // ----------- New flexible certificate handling -----------
+        PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
         {
-            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-            {
-                options.AddDevelopmentEncryptionAndSigningCertificate = false;
-            });
+            var usePfx = configuration["USE_OPENIDDICT_PFX"]?.ToLower() == "true";
 
-            PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+            if (usePfx && !string.IsNullOrWhiteSpace(configuration["AuthServer:CertificatePassPhrase"]))
             {
-                serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
-                serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
-            });
-        }
+                // Production path - use your actual certificate
+                serverBuilder.AddProductionEncryptionAndSigningCertificate(
+                    "openiddict.pfx",
+                    configuration["AuthServer:CertificatePassPhrase"]
+                );
+
+                if (!string.IsNullOrWhiteSpace(configuration["AuthServer:Authority"]))
+                {
+                    serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]));
+                }
+            }
+            else
+            {
+                // ✅ Development or Docker path (no PFX needed)
+                // Generate temporary ephemeral keys (lost when app restarts, safe for dev)
+                serverBuilder.AddEphemeralEncryptionKey()
+                             .AddEphemeralSigningKey();
+            }
+        });
+
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -130,7 +142,7 @@ namespace CCMS.Web;
             {
                 options.DisableTransportSecurityRequirement = true;
             });
-            
+
             Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
@@ -146,12 +158,12 @@ namespace CCMS.Web;
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
-         
+
         Configure<PermissionManagementOptions>(options =>
         {
             options.IsDynamicPermissionStoreEnabled = true;
         });
-        
+
         Configure<RazorPagesOptions>(options =>
         {
             options.Conventions.AuthorizePage("/Books/Index", CCMSPermissions.Books.Default);
@@ -159,7 +171,6 @@ namespace CCMS.Web;
             options.Conventions.AuthorizePage("/Books/EditModal", CCMSPermissions.Books.Edit);
         });
     }
-
 
     private void ConfigureHealthChecks(ServiceConfigurationContext context)
     {
@@ -172,19 +183,11 @@ namespace CCMS.Web;
         {
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-styles.css");
-                }
-            );
+                bundle => { bundle.AddFiles("/global-styles.css"); });
 
             options.ScriptBundles.Configure(
                 LeptonXLiteThemeBundles.Scripts.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-scripts.js");
-                }
-            );
+                bundle => { bundle.AddFiles("/global-scripts.js"); });
         });
     }
 
@@ -221,11 +224,16 @@ namespace CCMS.Web;
 
             if (hostingEnvironment.IsDevelopment())
             {
-                options.FileSets.ReplaceEmbeddedByPhysical<CCMSDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}CCMS.Domain.Shared", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<CCMSDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}CCMS.Domain", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<CCMSApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}CCMS.Application.Contracts", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<CCMSApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}CCMS.Application", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<CCMSHttpApiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}CCMS.HttpApi", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<CCMSDomainSharedModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}CCMS.Domain.Shared"));
+                options.FileSets.ReplaceEmbeddedByPhysical<CCMSDomainModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}CCMS.Domain"));
+                options.FileSets.ReplaceEmbeddedByPhysical<CCMSApplicationContractsModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}CCMS.Application.Contracts"));
+                options.FileSets.ReplaceEmbeddedByPhysical<CCMSApplicationModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}CCMS.Application"));
+                options.FileSets.ReplaceEmbeddedByPhysical<CCMSHttpApiModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}CCMS.HttpApi"));
                 options.FileSets.ReplaceEmbeddedByPhysical<CCMSWebModule>(hostingEnvironment.ContentRootPath);
             }
         });
@@ -236,13 +244,11 @@ namespace CCMS.Web;
         Configure<AbpNavigationOptions>(options =>
         {
             options.MenuContributors.Add(new CCMSMenuContributor());
-
         });
 
         Configure<AbpToolbarOptions>(options =>
         {
             options.Contributors.Add(new CCMSToolbarContributor());
-
         });
     }
 
@@ -256,16 +262,13 @@ namespace CCMS.Web;
 
     private void ConfigureSwaggerServices(IServiceCollection services)
     {
-        services.AddAbpSwaggerGen(
-            options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "CCMS API", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
-            }
-        );
+        services.AddAbpSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "CCMS API", Version = "v1" });
+            options.DocInclusionPredicate((docName, description) => true);
+            options.CustomSchemaIds(type => type.FullName);
+        });
     }
-
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {

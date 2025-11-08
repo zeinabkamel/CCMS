@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CCMS.DbMigrator": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
